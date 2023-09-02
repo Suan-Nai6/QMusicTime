@@ -1,3 +1,11 @@
+<!--
+  ~ 项目昵称：QMusicTime
+  ~ 项目作者：酸奶
+  ~ 模块昵称：QMusicTime.app.main
+  ~ 最后修改时间：2023/8/24 下午12:42
+  ~ Copyright© (c) 2017-2023 酸奶 https://github.com/Suan-Nai6
+  -->
+
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:aapt="http://schemas.android.com/aapt"
     android:width="108dp"

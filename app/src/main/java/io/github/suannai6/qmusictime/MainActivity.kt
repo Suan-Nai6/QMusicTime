@@ -1,7 +1,13 @@
+/*
+ * 项目昵称：QMusicTime
+ * 项目作者：酸奶
+ * 模块昵称：QMusicTime.app.main
+ * 最后修改时间：2023/8/30 下午8:51
+ * Copyright© (c) 2017-2023 酸奶 https://github.com/Suan-Nai6
+ */
+
 package io.github.suannai6.qmusictime
 
-import android.content.Intent
-import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -18,21 +24,16 @@ import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.window.DialogProperties
-import androidx.core.content.ContextCompat.startActivity
 import io.github.suannai6.qmusictime.ui.theme.QMusicTimeTheme
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.internal.NoOpContinuation.context
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import java.io.IOException
-import kotlin.coroutines.jvm.internal.CompletedContinuation.context
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

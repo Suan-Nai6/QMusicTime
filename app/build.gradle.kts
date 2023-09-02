@@ -1,3 +1,5 @@
+import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.androidApplication)
@@ -6,7 +8,13 @@ plugins {
 
 android {
     namespace = "io.github.suannai6.qmusictime"
-    compileSdk = 34
+    compileSdkPreview = "UpsideDownCakePrivacySandbox"
+/*
+    sourceSets {
+        main {
+            jniLibs.srcDir("libs")
+        }
+    }*/
 
     defaultConfig {
         applicationId = "io.github.suannai6.qmusictime"
@@ -14,10 +22,18 @@ android {
         targetSdk = 34
         versionCode = 1
         versionName = "1.0"
+        ndk {
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
+        }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
             useSupportLibrary = true
+        }
+        externalNativeBuild {
+            cmake {
+                cppFlags += ""
+            }
         }
     }
 
@@ -28,6 +44,10 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+            //开启代码混淆
+            isMinifyEnabled = true
+            //Zipalign优化
+            isZipAlignEnabled = true
         }
     }
     compileOptions {
@@ -49,7 +69,13 @@ android {
         }
     }
     buildToolsVersion = "34.0.0"
-    ndkVersion = "25.1.8937393"
+    ndkVersion = "26.0.10636728 rc2"
+    externalNativeBuild {
+        cmake {
+            path = file("src/main/cpp/CMakeLists.txt")
+            version = "3.22.1"
+        }
+    }
 }
 
 dependencies {
