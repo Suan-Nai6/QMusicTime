@@ -8,6 +8,9 @@
 
 package io.github.suannai6.qmusictime
 
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -19,17 +22,24 @@ import androidx.compose.animation.fadeOut
 import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.text.selection.SelectionContainer
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalClipboardManager
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.AnnotatedString
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.core.content.ContextCompat.getSystemService
 import io.github.suannai6.qmusictime.ui.theme.QMusicTimeTheme
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.selects.selectUnbiased
 import kotlinx.coroutines.withContext
 import okhttp3.OkHttpClient
 import okhttp3.Request
@@ -60,7 +70,8 @@ fun Greeting(modifier: Modifier = Modifier) {
     var qq by rememberSaveable { mutableStateOf("") }
     var qq1 by remember { mutableStateOf("") }
     var isButtonClicked by remember { mutableStateOf(false) }
-    val showDialog = remember { mutableStateOf(false) }
+    var showDialog = remember { mutableStateOf(false) }
+    var showDialog1 = remember { mutableStateOf(false) }
 
     Column(
         modifier = modifier,
@@ -71,6 +82,7 @@ fun Greeting(modifier: Modifier = Modifier) {
             value = qq,
             onValueChange = { qq = it },
             label = { Text("QQ账号") },
+            keyboardOptions = KeyboardOptions(keyboardType= KeyboardType.Number),
             singleLine = true,
             leadingIcon = { Image(painterResource(id = R.drawable.qq), contentDescription = "QQ账号") }
         )
@@ -84,7 +96,7 @@ fun Greeting(modifier: Modifier = Modifier) {
             Column(verticalArrangement = Arrangement.Center,
                 horizontalAlignment = Alignment.CenterHorizontally) {
                 Button(
-                    onClick = {}
+                    onClick = { showDialog1.value = true }
                 ) {
                     Text(text = "加入反馈群")
                 }
@@ -127,10 +139,46 @@ fun Greeting(modifier: Modifier = Modifier) {
             }
         }
     }
+    if (showDialog1.value) {
+        AlertDialog(
+            onDismissRequest = {
+                // Dismiss the dialog when the user clicks outside the dialog or on the back
+                // button. If you want to disable that functionality, simply use an empty
+                // onDismissRequest.
+                showDialog1.value = false
+            },
+            title = {
+                Text(text = "加入反馈群")
+            },
+            text = {
+                SelectionContainer {
+                    Text(text = "该软件只在葫芦侠发布并且完全免费，如果你在其他地方看到的请加入反馈群举报\n当然，你也可以在里面给我们说说开发什么新软件\n反馈群群号：1135205594")
+                }
+            },
+            confirmButton = {
+                TextButton(
+                    onClick = {
+                        Toast.makeText(context,"技术原因，请长按复制",Toast.LENGTH_SHORT).show()
+                    }
+                ) {
+                    Text("复制群号到剪切板")
+                }
+            },
+            dismissButton = {
+                TextButton(
+                    onClick = {
+                        showDialog1.value = false
+                    }
+                ) {
+                    Text("关闭")
+                }
+            }
+        )
+    }
 
     // 使用LaunchedEffect来监听isButtonClicked的变化
     if (isButtonClicked) {
-        LaunchedEffect(qq1) {
+        LaunchedEffect(Unit) {
             if (qq1.isNotBlank()) {
                 try {
                     showDialog.value = true
@@ -138,7 +186,7 @@ fun Greeting(modifier: Modifier = Modifier) {
                     result = response
                     // 在点击按钮后显示 Toast
                     showDialog.value = false
-                    Toast.makeText(context, "已发送请求，每日上限300分钟，刷取一次即可(软件制作：葫芦侠@酸奶)", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "已发送请求，刷取一次即可(软件制作：葫芦侠@酸奶)", Toast.LENGTH_SHORT).show()
                     Toast.makeText(context, "${result}", Toast.LENGTH_SHORT).show()
                 } catch (e: IOException) {
                     e.printStackTrace()
