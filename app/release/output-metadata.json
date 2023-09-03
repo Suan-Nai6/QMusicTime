@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "io.github.suannai6.qmusictime.release",
+  "applicationId": "io.github.suannai6.qmusictime",
   "variantName": "release",
   "elements": [
     {
@@ -19,6 +19,19 @@
       "versionCode": 2,
       "versionName": "1.1",
       "outputFile": "QMusicTime_armeabi-v7a_v1.1(2).apk"
+    },
+    {
+      "type": "ONE_OF_MANY",
+      "filters": [
+        {
+          "filterType": "ABI",
+          "value": "arm64-v8a"
+        }
+      ],
+      "attributes": [],
+      "versionCode": 2,
+      "versionName": "1.1",
+      "outputFile": "QMusicTime_arm64-v8a_v1.1(2).apk"
     },
     {
       "type": "ONE_OF_MANY",
@@ -45,19 +58,6 @@
       "versionCode": 2,
       "versionName": "1.1",
       "outputFile": "QMusicTime_x86_v1.1(2).apk"
-    },
-    {
-      "type": "ONE_OF_MANY",
-      "filters": [
-        {
-          "filterType": "ABI",
-          "value": "arm64-v8a"
-        }
-      ],
-      "attributes": [],
-      "versionCode": 2,
-      "versionName": "1.1",
-      "outputFile": "QMusicTime_arm64-v8a_v1.1(2).apk"
     }
   ],
   "elementType": "File"

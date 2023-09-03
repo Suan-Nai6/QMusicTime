@@ -72,10 +72,10 @@ android {
             //Zipalign优化
             //isZipAlignEnabled = true
             isShrinkResources = true
-            applicationIdSuffix = ".release"
+            //applicationIdSuffix = ".release"
         }
         debug {
-            applicationIdSuffix = ".debug"
+            //applicationIdSuffix = ".debug"
         }
     }
     compileOptions {
