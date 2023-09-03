@@ -1,4 +1,5 @@
 import com.android.build.gradle.internal.api.BaseVariantOutputImpl
+import java.util.*
 
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
@@ -8,7 +9,29 @@ plugins {
 
 android {
     namespace = "io.github.suannai6.qmusictime"
-    compileSdkPreview = "UpsideDownCakePrivacySandbox"
+    compileSdk = 34
+    splits {
+        abi {
+            isEnable = true
+            reset()
+            include("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
+            isUniversalApk = false
+        }
+    }
+    applicationVariants.all {
+        val variant = this
+        variant.outputs
+            .map { it as com.android.build.gradle.internal.api.BaseVariantOutputImpl }
+            .forEach { output ->
+                val name = "QMusicTime"
+                var abi = output.getFilter(com.android.build.OutputFile.ABI)
+                if (abi == null) abi = "all" //兼容
+                val version = variant.versionName
+                val versionCode = variant.versionCode
+                val outputFileName = "${name}_${abi}_${"v"}${version}(${versionCode}).apk"
+                output.outputFileName = outputFileName
+            }
+    }
 /*
     sourceSets {
         main {
@@ -20,10 +43,10 @@ android {
         applicationId = "io.github.suannai6.qmusictime"
         minSdk = 28
         targetSdk = 34
-        versionCode = 1
-        versionName = "1.0"
+        versionCode = 2
+        versionName = "1.1"
         ndk {
-            abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
+            //abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86", "x86_64")
         }
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
@@ -47,7 +70,12 @@ android {
             //开启代码混淆
             isMinifyEnabled = true
             //Zipalign优化
-            isZipAlignEnabled = true
+            //isZipAlignEnabled = true
+            isShrinkResources = true
+            applicationIdSuffix = ".release"
+        }
+        debug {
+            applicationIdSuffix = ".debug"
         }
     }
     compileOptions {
